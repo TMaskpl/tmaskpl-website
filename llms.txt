@@ -1,0 +1,35 @@
+# TMask.pl — Daniel Niemczok
+
+> DevOps & Automation Engineer z Polski. Specjalista infrastruktury, automatyzacji i integracji AI/LLM. Buduje niezawodne systemy produkcyjne i automatyzuje procesy biznesowe.
+
+## Kim jestem
+
+Daniel Niemczok — inżynier DevOps i automatyzacji z wieloletnim doświadczeniem. Pomagam firmom wdrażać nowoczesne rozwiązania infrastrukturalne, automatyzować powtarzalne zadania i integrować systemy AI/LLM w codziennych procesach.
+
+## Umiejętności kluczowe
+
+- Infrastruktura: Docker (expert), Kubernetes (advanced), Linux/Bash (expert), Proxmox (advanced), Nginx/Apache (advanced), Mikrotik (expert)
+- Automatyzacja: Ansible (expert), n8n (advanced), Terraform (intermediate), Jenkins/CI/CD (advanced)
+- Programowanie: Python (expert), Bash (expert), PowerShell (advanced)
+- AI/LLM: Claude API (advanced), LLM Deploy, RAG, Agents
+- Monitoring: Prometheus (advanced), Grafana (advanced), ELK Stack
+
+## Wybrane projekty
+
+- Infrastructure Automation Platform: Ansible + Terraform dla 40+ serwerów, zero-touch deployment
+- AI Workflow Integration: automatyzacja procesów biznesowych z LLM, redukcja pracy o 60%
+- Kubernetes Monitoring Stack: Prometheus + Grafana + Alertmanager, alerty real-time
+- Self-hosted Data Pipeline: Apache NiFi + Elasticsearch, 100k+ rekordów/dzień on-premise
+- DevOps CI/CD dla SaaS: Jenkins + Docker + GitLab, pełny pipeline do produkcji
+
+## Kontakt
+
+- Email: biuro@tmask.pl
+- Lokalizacja: Polska
+- Dostępność: dostępny do współpracy
+
+## Profile
+
+- LinkedIn: https://www.linkedin.com/in/daniel-niemczok-1a533b2b/
+- GitHub: https://github.com/TMaskpl
+- YouTube: https://www.youtube.com/@DanielNiemczok
