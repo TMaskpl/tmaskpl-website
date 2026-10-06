@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "wrangler dev --port 4321 --ip 127.0.0.1",
+    "preview": "wrangler dev --port 4321 --ip 127.0.0.1 --local-upstream 127.0.0.1:4321",
     "serve:reference": "http-server reference -p 4322 -s -c-1",
-    "test": "playwright test",
-    "deploy": "astro build && wrangler deploy"
+    "test": "node --test tests/worker.test.js && playwright test",
+    "deploy": "astro build && wrangler deploy",
+    "test:worker": "node --test tests/worker.test.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
