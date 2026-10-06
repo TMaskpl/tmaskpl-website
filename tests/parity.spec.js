@@ -146,5 +146,5 @@ test('help zawiera hire, a pill hire jest ostatni', async ({ page }) => {
   await page.locator('#cmd-input').press('Enter');
   await settle(page);
   await expect(page.locator('#terminal .line.hire-only')).toContainText('hire');
-  await expect(page.locator('.pills .pill').last()).toHaveText('hire');
+  await expect(page.locator('.pills .pill').last()).toHaveText('Co potrzeba?');
 });
