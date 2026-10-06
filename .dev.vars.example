@@ -6,5 +6,6 @@ TURNSTILE_HOSTNAMES=example.com
 TURNSTILE_ACTION=
 TURNSTILE_SECRET=1x0000000000000000000000000000000AA
 LEAD_HMAC_SECRET=dev-only-not-a-secret
-N8N_WEBHOOK_BASE=https://ai.tmask.pl/webhook
+# Adres bazowy webhooków n8n — nie commitować (repo publiczne); wartość w notatkach projektu / Keychain
+N8N_WEBHOOK_BASE=
 N8N_AUTH_TOKEN=
