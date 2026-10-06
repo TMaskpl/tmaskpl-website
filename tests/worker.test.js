@@ -2,6 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../worker/index.js';
+import { makeEnv, apiRequest } from './helpers.js';
 
 const env = {
   ASSETS: { fetch: async (req) => new Response(`asset:${new URL(req.url).pathname}`, { status: 200 }) },
@@ -37,4 +38,20 @@ test('workers.dev i localhost nie są przekierowywane', async () => {
     const res = await call(url);
     assert.equal(res.status, 200, url);
   }
+});
+
+test('nieznany /api/* → 404 JSON, nie ASSETS', async () => {
+  const res = await worker.fetch(new Request('https://tmask.pl/api/nic'), { ...makeEnv(), ...env });
+  assert.equal(res.status, 404);
+  assert.deepEqual(await res.json(), { ok: false });
+});
+
+test('/api/lead trafia do handlera (obcy Origin → 403)', async () => {
+  const res = await worker.fetch(apiRequest('/api/lead', {}, { origin: 'https://evil.example' }), { ...makeEnv(), ...env });
+  assert.equal(res.status, 403);
+});
+
+test('/api/lead/confirm trafia do handlera (zły token → 400)', async () => {
+  const res = await worker.fetch(apiRequest('/api/lead/confirm', { token: 'x' }), { ...makeEnv(), ...env });
+  assert.equal(res.status, 400);
 });
