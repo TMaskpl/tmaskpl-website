@@ -3,7 +3,9 @@ dist/
 .astro/
 .wrangler/
 .dev.vars*
+!.dev.vars.example
 .env*
+!.env.production
 test-results/
 playwright-report/
 .DS_Store

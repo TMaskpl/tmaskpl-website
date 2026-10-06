@@ -26,6 +26,15 @@ npm run dev        # http://localhost:4321
 npm test           # test Workera + testy parytetu (build serwowany przez wrangler dev)
 ```
 
+## Formularz leadów (`hire`)
+
+`/api/lead` i `/api/lead/confirm` obsługuje Worker (`worker/`), dane trafiają do webhooków n8n
+`tmask-lead-new` / `tmask-lead-confirm` (workflow „Onbording TMaskPL”). Double opt-in: mail AI
+wychodzi dopiero po potwierdzeniu na `/potwierdz`.
+
+Sekrety Workera (`wrangler secret put`): `TURNSTILE_SECRET`, `N8N_WEBHOOK_BASE`, `N8N_AUTH_TOKEN`,
+`LEAD_HMAC_SECRET`. Lokalnie: `.dev.vars` na wzór `.dev.vars.example`.
+
 Domeny `tmask.pl` i `www.tmask.pl` to Custom Domains Workera (`routes` w `wrangler.jsonc`).
 
 Deploy: automatyczny przez Cloudflare Workers Builds po pushu do `main`

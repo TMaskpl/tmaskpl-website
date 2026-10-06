@@ -1,0 +1,57 @@
+/* Okno formularza „hire” — drugie okno terminala */
+.hire {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  margin: auto;
+  border: 1px solid #00ff4133;
+  border-radius: 8px;
+  background: #0d0d0d;
+  color: #d0d0d0;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 0 40px #00ff4122;
+  overflow: auto;
+}
+.hire::backdrop { background: rgba(0, 0, 0, 0.75); }
+.hire .title-bar { position: sticky; top: 0; z-index: 1; }
+.hire-close {
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  color: #888;
+  font: inherit;
+  font-size: 18px;
+  cursor: pointer;
+}
+.hire-close:hover, .hire-close:focus-visible { color: var(--green); }
+.hire-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.hire [hidden] { display: none; }
+.hire-intro { color: #888; margin: 0 0 8px; }
+.hire label { color: var(--green-dim); }
+.hire input:not([type='checkbox']), .hire textarea {
+  background: #050505;
+  border: 1px solid #222;
+  border-radius: 3px;
+  color: #e0e0e0;
+  font: inherit;
+  padding: 8px 10px;
+  caret-color: var(--green);
+}
+.hire input:focus-visible, .hire textarea:focus-visible { outline: 1px solid var(--green); border-color: var(--green); }
+.hire textarea { resize: vertical; min-height: 96px; }
+.hire-consent { display: flex; gap: 8px; align-items: flex-start; color: #aaa !important; font-size: 12px; margin-top: 8px; }
+.hire-consent a { color: var(--green); }
+.field-error { color: #ff5f56; font-size: 12px; margin: 0; min-height: 0; }
+.field-error:empty { display: none; }
+.hire-status { margin: 4px 0 0; font-size: 13px; color: #ffd700; }
+.hire-status:empty { display: none; }
+.hire-submit { align-self: flex-start; margin-top: 8px; font-size: 14px; }
+.hire-submit:disabled { opacity: 0.5; cursor: wait; }
+.hire-ok { color: var(--green); }
+.hire-turnstile { margin-top: 8px; min-height: 65px; }
+/* Honeypot poza ekranem (nie display:none — część botów to pomija) */
+.hire-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+@media (max-width: 600px) {
+  .hire { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; border-radius: 0; }
+}

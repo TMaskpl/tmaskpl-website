@@ -1,0 +1,62 @@
+---
+import '../styles/hire.css';
+---
+<dialog id="hire-dialog" class="hire" aria-labelledby="hire-title">
+  <div class="title-bar">
+    <span class="dot close"></span>
+    <span class="dot min"></span>
+    <span class="dot max"></span>
+    <span class="bar-title" id="hire-title">~/hire.sh</span>
+    <button type="button" class="hire-close" data-hire-close aria-label="Zamknij formularz">×</button>
+  </div>
+
+  <form id="hire-form" class="hire-body">
+    <p class="hire-intro">Opisz, w czym mogę pomóc. Odpowiem po potwierdzeniu adresu e-mail.</p>
+
+    <label for="hire-nazwa">&gt; imię i nazwisko / firma</label>
+    <input id="hire-nazwa" name="nazwa" autocomplete="name" required minlength="2" maxlength="100" aria-describedby="err-nazwa">
+    <p class="field-error" id="err-nazwa" data-error-for="nazwa" aria-live="polite"></p>
+
+    <label for="hire-email">&gt; e-mail</label>
+    <input id="hire-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="err-email">
+    <p class="field-error" id="err-email" data-error-for="email" aria-live="polite"></p>
+
+    <label for="hire-telefon">&gt; telefon (opcjonalnie)</label>
+    <input id="hire-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="20" pattern="[0-9+\-\s\(\)]*" aria-describedby="err-telefon">
+    <p class="field-error" id="err-telefon" data-error-for="telefon" aria-live="polite"></p>
+
+    <label for="hire-rodzaj">&gt; branża / rodzaj firmy (opcjonalnie)</label>
+    <input id="hire-rodzaj" name="rodzaj_firmy" autocomplete="organization" maxlength="100" aria-describedby="err-rodzaj_firmy">
+    <p class="field-error" id="err-rodzaj_firmy" data-error-for="rodzaj_firmy" aria-live="polite"></p>
+
+    <label for="hire-zakres">&gt; w czym mogę pomóc?</label>
+    <textarea id="hire-zakres" name="zakres_wsparcia" rows="5" required minlength="10" maxlength="2000" aria-describedby="err-zakres_wsparcia"></textarea>
+    <p class="field-error" id="err-zakres_wsparcia" data-error-for="zakres_wsparcia" aria-live="polite"></p>
+
+    <div class="hire-hp" aria-hidden="true">
+      <label for="hire-website">Strona www</label>
+      <input id="hire-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <label class="hire-consent">
+      <input type="checkbox" name="zgoda_rodo" required aria-describedby="err-zgoda_rodo">
+      <span>Wyrażam zgodę na przetwarzanie moich danych osobowych podanych w formularzu w celu odpowiedzi na zapytanie, zgodnie z <a href="/prywatnosc" target="_blank" rel="noopener">polityką prywatności</a>.</span>
+    </label>
+    <p class="field-error" id="err-zgoda_rodo" data-error-for="zgoda_rodo" aria-live="polite"></p>
+
+    <div id="hire-turnstile" class="hire-turnstile"></div>
+    <p class="field-error" data-error-for="turnstile" aria-live="polite"></p>
+
+    <p id="hire-status" class="hire-status" role="status" aria-live="polite"></p>
+    <button type="submit" class="pill hire-submit">[ wyślij ]</button>
+  </form>
+
+  <div id="hire-success" class="hire-body" hidden>
+    <p class="hire-ok">✓ Sprawdź skrzynkę i kliknij link potwierdzający (ważny 48 h).</p>
+    <button type="button" class="pill" data-hire-close>[ zamknij ]</button>
+  </div>
+</dialog>
+
+<script>
+  import '../scripts/hire.js';
+</script>

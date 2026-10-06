@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   webServer: [
     { command: 'npm run serve:reference', url: 'http://localhost:4322/original.html', reuseExistingServer: false },
-    { command: 'npm run build && npm run preview', url: 'http://127.0.0.1:4321/', reuseExistingServer: false },
+    { command: 'npm run build && npm run preview', url: 'http://127.0.0.1:4321/', reuseExistingServer: false,
+      env: { PUBLIC_TURNSTILE_SITE_KEY: '1x00000000000000000000AA' } },
   ],
 });
