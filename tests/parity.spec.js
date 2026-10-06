@@ -90,7 +90,11 @@ for (const cmd of ['whoami', 'skills', 'projects', 'contact', 'social', 'help', 
   test(`szybka komenda (pill): ${cmd}`, async ({ browser }, testInfo) => {
     const ref = await open(browser, testInfo, REFERENCE);
     const neu = await open(browser, testInfo, ASTRO);
-    await both(ref, neu, `pill ${cmd}`, (p) => p.locator('.pill', { hasText: new RegExp(`^${cmd}$`) }).click());
+    await both(ref, neu, `pill ${cmd}`, async (p) => {
+      await p.locator('.pill', { hasText: new RegExp(`^${cmd}$`) }).click();
+      // .pill:hover ma transition 0.15s — zdejmujemy hover, settle() czeka aż przejście się skończy
+      await p.mouse.move(0, 0);
+    });
   });
 }
 
