@@ -1,0 +1,35 @@
+
+<div class="window">
+  <div class="title-bar">
+    <span class="dot close"></span>
+    <span class="dot min"></span>
+    <span class="dot max"></span>
+    <span class="bar-title">
+      <img src="logo.png" class="bar-logo" alt="TMask.pl logo" onerror="this.style.display='none'">
+      biuro@tmask.pl: ~
+    </span>
+  </div>
+
+  <div class="terminal" id="terminal">
+    <!-- output injected by JS -->
+    <div class="input-row" id="input-row">
+      <span class="prompt">daniel@tmask:~$&nbsp;</span>
+      <input type="text" id="cmd-input" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="">
+    </div>
+  </div>
+
+  <div class="pills">
+    <span class="pill-label">szybkie komendy →</span>
+    <button class="pill" data-cmd="whoami">whoami</button>
+    <button class="pill" data-cmd="skills">skills</button>
+    <button class="pill" data-cmd="projects">projects</button>
+    <button class="pill" data-cmd="contact">contact</button>
+    <button class="pill" data-cmd="social">social</button>
+    <button class="pill" data-cmd="help">help</button>
+    <button class="pill" data-cmd="clear">clear</button>
+  </div>
+</div>
+
+<script>
+  import "../scripts/terminal.js";
+</script>
