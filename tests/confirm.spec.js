@@ -78,3 +78,11 @@ test('token z białymi znakami na brzegach jest przycinany', async ({ page }) =>
   await expect(visible(page, 'confirmed')).toBeVisible();
   expect(requests).toEqual([{ token: 'abc.123.def' }]);
 });
+
+test('/prywatnosc: treść, administrator, link z formularza', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4321/prywatnosc');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Polityka prywatności');
+  await expect(page.locator('body')).toContainText('Daniel Niemczok');
+  await expect(page.locator('body')).not.toContainText('«');
+  await expect(page.locator('a[href="mailto:biuro@tmask.pl"]').first()).toBeVisible();
+});
