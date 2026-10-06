@@ -26,7 +26,7 @@ export async function handleLead(request, env, deps = {}) {
   const result = validateLead(input);
   if (!result.ok) return json(400, { ok: false, errors: result.errors });
 
-  const human = await verifyTurnstile({
+  const turnstile = await verifyTurnstile({
     token: input.turnstile_token,
     ip,
     secret: env.TURNSTILE_SECRET,
@@ -34,7 +34,10 @@ export async function handleLead(request, env, deps = {}) {
     action: env.TURNSTILE_ACTION || '',
     fetchImpl,
   });
-  if (!human) return json(400, { ok: false, errors: { turnstile: TURNSTILE_ERROR } });
+  if (!turnstile.ok) {
+    console.error(JSON.stringify({ event: 'lead_turnstile_failed', reason: turnstile.reason }));
+    return json(400, { ok: false, errors: { turnstile: TURNSTILE_ERROR } });
+  }
 
   const leadId = uuid();
   const ts = now();

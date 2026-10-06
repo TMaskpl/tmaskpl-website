@@ -74,9 +74,14 @@ test('błędy walidacji → 400 z errors, bez Turnstile i n8n', async () => {
 });
 
 test('Turnstile odrzucony → 400 errors.turnstile, bez n8n', async () => {
-  const fetch = fakeFetch({ turnstile: { success: false } });
-  const res = await send(body(), { fetch });
+  const fetch = fakeFetch({ turnstile: { success: false, 'error-codes': ['invalid-input-response'] } });
+  const logs = [];
+  const orig = console.error;
+  console.error = (m) => logs.push(m);
+  let res;
+  try { res = await send(body(), { fetch }); } finally { console.error = orig; }
   assert.equal(res.status, 400);
+  assert.deepEqual(logs.map((l) => JSON.parse(l)), [{ event: 'lead_turnstile_failed', reason: 'not_success:invalid-input-response' }]);
   assert.ok((await res.json()).errors.turnstile);
   assert.equal(fetch.n8nCalls().length, 0);
 });
