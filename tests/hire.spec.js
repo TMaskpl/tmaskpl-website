@@ -38,6 +38,8 @@ test('pill hire otwiera okno, Esc zamyka i oddaje fokus', async ({ page }) => {
   await page.locator('.pill[data-cmd="hire"]').click();
   const dialog = page.locator('#hire-dialog');
   await expect(dialog).toBeVisible();
+  await expect(page.locator('#hire-success')).toBeHidden();
+  await expect(page.locator('#hire-form')).toBeVisible();
   await expect(page.getByLabel('imię i nazwisko / firma')).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
@@ -87,6 +89,7 @@ for (const [status, text] of [[429, 'Za dużo prób'], [502, 'Nie udało się wy
     await page.getByRole('button', { name: '[ wyślij ]' }).click();
     await expect(page.locator('#hire-status')).toContainText(text);
     await expect(page.locator('#hire-status')).toContainText('biuro@tmask.pl');
+    await expect.poll(() => page.evaluate(() => window.__tsResets)).toBe(1);
   });
 }
 
