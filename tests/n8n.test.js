@@ -28,7 +28,10 @@ test('błąd sieci → status 0', async () => {
 });
 
 test('timeout → status 0', async () => {
-  const fetchImpl = (url, init) => new Promise((_, reject) => init.signal.addEventListener('abort', () => reject(init.signal.reason)));
+  const fetchImpl = (url, init) => new Promise((_, reject) => {
+    const keepAlive = setTimeout(() => {}, 1000); // AbortSignal.timeout() używa timera unref — trzymamy pętlę zdarzeń
+    init.signal.addEventListener('abort', () => { clearTimeout(keepAlive); reject(init.signal.reason); });
+  });
   const r = await callN8n({ base: 'https://n8n.example/webhook', path: 'p', authToken: 't', payload: {}, fetchImpl, timeoutMs: 20 });
   assert.deepEqual(r, { status: 0, body: null });
 });
