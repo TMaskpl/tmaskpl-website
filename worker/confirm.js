@@ -25,7 +25,7 @@ export async function handleConfirm(request, env, deps = {}) {
     payload: { lead_id: check.leadId, ts: ts.toISOString() },
     fetchImpl,
   });
-  if (res.status === 404) return json(404, { status: 'not_found' });
+  if (res.status === 404 && res.body?.status === 'not_found') return json(404, { status: 'not_found' });
   const status = res.body?.status;
   if (res.status >= 200 && res.status < 300 && (status === 'confirmed' || status === 'already')) {
     console.log(JSON.stringify({ event: 'lead_confirm', lead_id: check.leadId, status }));

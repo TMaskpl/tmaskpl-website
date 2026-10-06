@@ -50,6 +50,12 @@ test('n8n 404 → 404 not_found', async () => {
   assert.deepEqual(await res.json(), { status: 'not_found' });
 });
 
+test('n8n 404 z body "webhook not registered" (workflow nieaktywny) → 502 error', async () => {
+  const res = await send(await tokenAt(), { fetch: fakeFetch({ n8n: { status: 404, body: { code: 404, message: 'The requested webhook "tmask-lead-confirm" is not registered.' } } }) });
+  assert.equal(res.status, 502);
+  assert.deepEqual(await res.json(), { status: 'error' });
+});
+
 for (const [label, n8n] of [['500', { status: 500, body: {} }], ['200 z nieznanym body', { status: 200, body: { foo: 1 } }], ['200 nie-JSON', { status: 200, body: null }], ['sieć', 'down']]) {
   test(`n8n ${label} → 502 error`, async () => {
     const res = await send(await tokenAt(), { fetch: fakeFetch({ n8n }) });
