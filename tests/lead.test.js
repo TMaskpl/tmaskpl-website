@@ -94,3 +94,15 @@ for (const [label, n8n] of [['500', { status: 500, body: {} }], ['404', { status
     assert.deepEqual(await res.json(), { ok: false });
   });
 }
+
+test('n8n 200 {}, pusty body → 502 bez szczegółów', async () => {
+  const res = await send(body(), { fetch: fakeFetch({ n8n: { status: 200, body: null } }) });
+  assert.equal(res.status, 502);
+  assert.deepEqual(await res.json(), { ok: false });
+});
+
+test('n8n 200 {ok:false} → 502 bez szczegółów', async () => {
+  const res = await send(body(), { fetch: fakeFetch({ n8n: { status: 200, body: { ok: false } } }) });
+  assert.equal(res.status, 502);
+  assert.deepEqual(await res.json(), { ok: false });
+});

@@ -50,7 +50,7 @@ export async function handleLead(request, env, deps = {}) {
   };
 
   const res = await callN8n({ base: env.N8N_WEBHOOK_BASE, path: 'tmask-lead-new', authToken: env.N8N_AUTH_TOKEN, payload, fetchImpl });
-  if (res.status < 200 || res.status >= 300) {
+  if (res.status < 200 || res.status >= 300 || res.body?.ok !== true) {
     console.error(JSON.stringify({ event: 'lead_new_failed', lead_id: leadId, n8n_status: res.status }));
     return json(502, { ok: false });
   }
