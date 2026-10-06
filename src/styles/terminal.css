@@ -86,13 +86,6 @@
       font-size: 13px;
       letter-spacing: 0.5px;
     }
-    .bar-logo {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      opacity: 0.85;
-    }
-
     /* Terminal body */
     .terminal {
       padding: 20px;
