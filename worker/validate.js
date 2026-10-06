@@ -12,7 +12,7 @@ const MESSAGES = {
   zgoda_rodo: 'Zgoda jest potrzebna, abyśmy mogli odpowiedzieć na zapytanie.',
 };
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const EMAIL_RE = /^[^\s@,;<>"()\[\]\\]+@[^\s@,;<>"()\[\]\\]+\.[^\s@,;<>"()\[\]\\]{2,}$/;
 const PHONE_RE = /^[0-9+\-\s()]*$/;
 const CONTROL_RE = /[\u0000-\u001f\u007f]/;
 const CONTROL_EXCEPT_NL_TAB_RE = /[\u0000-\u0008\u000b-\u001f\u007f]/;

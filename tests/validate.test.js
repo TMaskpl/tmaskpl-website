@@ -42,9 +42,10 @@ test('nazwa: wymagana, 2–100 znaków', () => {
 });
 
 test('email: format i długość', () => {
-  for (const email of ['', 'jan', 'jan@', '@example.com', 'jan@example', 'jan kowalski@example.com', `${'a'.repeat(250)}@x.pl`]) {
+  for (const email of ['', 'jan', 'jan@', '@example.com', 'jan@example', 'jan kowalski@example.com', `${'a'.repeat(250)}@x.pl`, 'a@x.pl,b@y.pl', 'a;b@x.pl', '<a@x.pl>', 'a"b@x.pl']) {
     errorFor({ email }, 'email');
   }
+  assert.equal(validateLead({ ...valid(), email: 'jan.kowalski+tag@sub.example.co.uk' }).ok, true);
 });
 
 test('telefon: tylko cyfry + - spacja ( ), maks. 20', () => {
