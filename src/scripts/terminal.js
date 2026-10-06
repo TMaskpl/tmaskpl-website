@@ -105,6 +105,7 @@ const COMMANDS = {
       ['  <span style="color:#00ff41">clear</span>       — wyczyść terminal', ''],
       ['  <span style="color:#00ff41">ls</span>          — lista plików w katalogu', ''],
       ['  <span style="color:#00ff41">cat cv.txt</span>  — pokaż CV', ''],
+      ['  <span style="color:#00ff41">hire</span>        — zamów wsparcie IT (formularz)', 'hire-only'],
       ['', ''],
     ];
   },
@@ -255,6 +256,11 @@ const COMMANDS = {
     ];
   },
 
+  hire() {
+    window.dispatchEvent(new CustomEvent('tmask:open-hire'));
+    return [['  Otwieram formularz kontaktowy…', 'dim hire-only']];
+  },
+
   clear() { return null; },
 
   default(cmd) {
@@ -334,6 +340,11 @@ term.addEventListener('click', () => { if (!booting) input.focus(); });
 // Szybkie komendy (zamiast inline onclick — moduł nie wystawia globalnego run)
 document.querySelectorAll('.pill[data-cmd]').forEach(b => {
   b.addEventListener('click', () => run(b.dataset.cmd));
+});
+
+// Formularz (hire.js) informuje o wysłaniu zgłoszenia
+window.addEventListener('tmask:lead-sent', () => {
+  addLine('  ✓ Zgłoszenie wysłane — potwierdź je linkiem z e-maila (ważny 48 h).', 'green hire-only');
 });
 
 // ── Start ─────────────────────────────────────────────────────────────

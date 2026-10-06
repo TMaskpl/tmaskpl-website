@@ -30,6 +30,8 @@ async function open(browser, testInfo, url) {
 }
 
 async function snapshot(page) {
+  // Nowa funkcja formularza (pill `hire`, linie w terminalu) nie istnieje w oryginale — porównujemy resztę
+  await page.evaluate(() => document.querySelectorAll('[data-hire], #terminal .line.hire-only').forEach((el) => el.remove()));
   const html = await page.locator('#terminal').innerHTML();
   const png = await page.screenshot({ fullPage: true, animations: 'disabled', caret: 'hide' });
   return { html, png };
@@ -136,3 +138,13 @@ for (const file of ['robots.txt', 'llms.txt', 'sitemap.xml']) {
     expect(await res.text()).toBe(readFileSync(`public/${file}`, 'utf8'));
   });
 }
+
+test('help zawiera hire, a pill hire jest ostatni', async ({ page }) => {
+  await page.goto(ASTRO);
+  await settle(page);
+  await page.locator('#cmd-input').fill('help');
+  await page.locator('#cmd-input').press('Enter');
+  await settle(page);
+  await expect(page.locator('#terminal .line.hire-only')).toContainText('hire');
+  await expect(page.locator('.pills .pill').last()).toHaveText('hire');
+});
