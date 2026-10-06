@@ -10,6 +10,8 @@
     // Worker musi widzieć każde żądanie, żeby przekierować http/www także dla plików statycznych
     "run_worker_first": true
   },
+  // Workers Builds dla gałęzi innych niż main uruchamia `wrangler preview`, który wymaga tego bloku
+  "previews": {},
   "routes": [
     { "pattern": "tmask.pl", "custom_domain": true },
     { "pattern": "www.tmask.pl", "custom_domain": true }
