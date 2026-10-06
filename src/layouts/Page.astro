@@ -1,0 +1,37 @@
+---
+// Layout podstron: jedno okno terminala, bez treści SEO strony głównej.
+import '../styles/terminal.css';
+const props = Astro.props.frontmatter ?? Astro.props;
+const { title, description, noindex = false } = props;
+---
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  {noindex && <meta name="robots" content="noindex">}
+  <slot name="head" />
+</head>
+<body>
+<div class="window">
+  <div class="title-bar">
+    <span class="dot close"></span>
+    <span class="dot min"></span>
+    <span class="dot max"></span>
+    <span class="bar-title">biuro@tmask.pl: ~</span>
+  </div>
+  <div class="terminal page-body">
+    <slot />
+  </div>
+</div>
+<style is:global>
+  .page-body { padding: 20px; color: #d0d0d0; line-height: 1.6; }
+  .page-body a { color: var(--green); }
+  .page-body .pill { margin-top: 12px; font-size: 14px; }
+  .page-body [hidden] { display: none !important; }
+  .page-body .ok { color: var(--green); }
+</style>
+</body>
+</html>

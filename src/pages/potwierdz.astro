@@ -1,0 +1,19 @@
+---
+import Page from '../layouts/Page.astro';
+---
+<Page title="Potwierdź zgłoszenie | TMask.pl" description="Potwierdzenie zgłoszenia wysłanego z formularza na tmask.pl." noindex>
+  <meta slot="head" name="referrer" content="no-referrer">
+  <div class="line">daniel@tmask:~$ ./potwierdz.sh</div>
+  <p data-state="ready">Kliknij, aby potwierdzić zgłoszenie wysłane z formularza na tmask.pl.</p>
+  <p data-state="busy" hidden>potwierdzanie…</p>
+  <p data-state="confirmed" class="ok" hidden>✓ Dziękuję! Zgłoszenie potwierdzone — odpowiedź przyjdzie na Twój e-mail.</p>
+  <p data-state="already" hidden>To zgłoszenie było już potwierdzone. Nic więcej nie trzeba robić.</p>
+  <p data-state="expired" hidden>Link wygasł (był ważny 48 h). <a href="/">Wypełnij formularz ponownie</a> — komenda <code>hire</code>.</p>
+  <p data-state="invalid" hidden>Ten link jest nieprawidłowy albo zgłoszenie już nie istnieje. <a href="/">Wypełnij formularz ponownie</a>.</p>
+  <p data-state="error" hidden>Coś poszło nie tak. Spróbuj ponownie za chwilę albo napisz na <a href="mailto:biuro@tmask.pl">biuro@tmask.pl</a>.</p>
+  <button id="confirm-btn" class="pill" type="button" data-state="ready error">[ potwierdzam ]</button>
+</Page>
+
+<script>
+  import '../scripts/confirm.js';
+</script>
