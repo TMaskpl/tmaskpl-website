@@ -35,18 +35,26 @@ async function snapshot(page) {
   return { html, png };
 }
 
-function diffPixels(a, b) {
+async function diffPixels(a, b) {
   const A = PNG.sync.read(a);
   const B = PNG.sync.read(b);
   expect([B.width, B.height], 'wymiary screenshotu').toEqual([A.width, A.height]);
-  return pixelmatch(A.data, B.data, null, A.width, A.height, { threshold: 0 });
+  const diff = new PNG({ width: A.width, height: A.height });
+  const n = pixelmatch(A.data, B.data, diff.data, A.width, A.height, { threshold: 0 });
+  if (n > 0) {
+    const info = test.info();
+    await info.attach('reference.png', { body: a, contentType: 'image/png' });
+    await info.attach('astro.png', { body: b, contentType: 'image/png' });
+    await info.attach('diff.png', { body: PNG.sync.write(diff), contentType: 'image/png' });
+  }
+  return n;
 }
 
 async function compare(ref, neu, label) {
   const r = await snapshot(ref.page);
   const n = await snapshot(neu.page);
   expect(n.html, `${label}: DOM terminala`).toBe(r.html);
-  expect(diffPixels(r.png, n.png), `${label}: różne piksele`).toBe(0);
+  expect(await diffPixels(r.png, n.png), `${label}: różne piksele`).toBe(0);
 }
 
 /** Wykonuje tę samą akcję na obu stronach i porównuje wynik. */
