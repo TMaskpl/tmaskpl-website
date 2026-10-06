@@ -65,8 +65,8 @@ test('brak tokenu → od razu stan invalid, bez przycisku', async ({ page }) => 
 test('podwójne kliknięcie → jedno żądanie', async ({ page }) => {
   const requests = await open(page, '?t=abc.123.def', async (route) => { await new Promise((r) => setTimeout(r, 400)); await reply(200, { status: 'confirmed' })(route); });
   const btn = page.getByRole('button', { name: '[ potwierdzam ]' });
-  await btn.click();
-  await btn.click({ force: true, timeout: 1000 }).catch(() => {});
+  // oba kliknięcia synchronicznie, z pominięciem actionability (przycisk znika po pierwszym)
+  await btn.evaluate((b) => { b.click(); b.click(); });
   await expect(visible(page, 'confirmed')).toBeVisible();
   expect(requests).toHaveLength(1);
 });
