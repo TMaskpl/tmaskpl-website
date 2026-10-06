@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const REFERENCE = 'http://localhost:4322/original.html';
 const ASTRO = 'http://127.0.0.1:4321/';
@@ -43,9 +43,9 @@ async function diffPixels(a, b) {
   const n = pixelmatch(A.data, B.data, diff.data, A.width, A.height, { threshold: 0 });
   if (n > 0) {
     const info = test.info();
-    await info.attach('reference.png', { body: a, contentType: 'image/png' });
-    await info.attach('astro.png', { body: b, contentType: 'image/png' });
-    await info.attach('diff.png', { body: PNG.sync.write(diff), contentType: 'image/png' });
+    writeFileSync(info.outputPath('reference.png'), a);
+    writeFileSync(info.outputPath('astro.png'), b);
+    writeFileSync(info.outputPath('diff.png'), PNG.sync.write(diff));
   }
   return n;
 }
