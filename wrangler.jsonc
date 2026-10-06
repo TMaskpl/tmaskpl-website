@@ -12,6 +12,18 @@
   },
   // Workers Builds dla gałęzi innych niż main uruchamia `wrangler preview`, który wymaga tego bloku
   "previews": {},
+  "vars": {
+    "SITE_URL": "https://tmask.pl",
+    "ALLOWED_ORIGINS": "https://tmask.pl",
+    "TURNSTILE_HOSTNAMES": "tmask.pl",
+    "TURNSTILE_ACTION": "lead"
+  },
+  // Okno CF tylko 10 lub 60 s, liczone per lokalizacja
+  "ratelimits": [
+    { "name": "LEAD_LIMIT", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } },
+    { "name": "CONFIRM_LIMIT", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
+  ],
+  "observability": { "enabled": true },
   "routes": [
     { "pattern": "tmask.pl", "custom_domain": true },
     { "pattern": "www.tmask.pl", "custom_domain": true }

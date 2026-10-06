@@ -1,0 +1,10 @@
+# Skopiuj do .dev.vars (w .gitignore) i uzupełnij N8N_AUTH_TOKEN z Keychain (Task 12).
+SITE_URL=http://127.0.0.1:4321
+ALLOWED_ORIGINS=http://127.0.0.1:4321
+# Testowe klucze Turnstile zwracają hostname "example.com" i puste action — patrz Task 5, Step 1
+TURNSTILE_HOSTNAMES=example.com
+TURNSTILE_ACTION=
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+LEAD_HMAC_SECRET=dev-only-not-a-secret
+N8N_WEBHOOK_BASE=https://ai.tmask.pl/webhook
+N8N_AUTH_TOKEN=
