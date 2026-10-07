@@ -48,7 +48,6 @@
 .hire-submit { align-self: flex-start; margin-top: 8px; font-size: 14px; }
 .hire-submit:disabled { opacity: 0.5; cursor: wait; }
 .hire-ok { color: var(--green); }
-.hire-turnstile { margin-top: 8px; min-height: 65px; }
 /* Honeypot poza ekranem (nie display:none — część botów to pomija) */
 .hire-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 

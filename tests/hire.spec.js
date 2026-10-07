@@ -9,8 +9,21 @@ const TURNSTILE_STUB = `
     reset() { window.__tsResets = (window.__tsResets || 0) + 1; setTimeout(() => window.__ts.callback('tok-' + (window.__tsResets + 1)), 0); },
   };`;
 
-async function openPage(page, apiHandler) {
-  await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: TURNSTILE_STUB }));
+// Atrapa: token przychodzi z opóźnieniem (niewidoczny widżet jeszcze weryfikuje)
+const TURNSTILE_SLOW = `
+  window.turnstile = {
+    render(el, o) { window.__ts = o; window.__tsRenders = 1; setTimeout(() => o.callback('tok-slow'), 1500); return 'w1'; },
+    reset() {},
+  };`;
+// Atrapa: weryfikacja kończy się błędem
+const TURNSTILE_ERROR = `
+  window.turnstile = {
+    render(el, o) { window.__ts = o; window.__tsRenders = 1; return 'w1'; },
+    reset() {},
+  };`;
+
+async function openPage(page, apiHandler, stub = TURNSTILE_STUB) {
+  await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: stub }));
   const requests = [];
   await page.route('**/api/lead', async (route) => {
     requests.push(route.request().postDataJSON());
@@ -120,4 +133,34 @@ test('honeypot jest niewidoczny i poza kolejnością tabulacji', async ({ page }
   const hp = page.locator('input[name="website"]');
   await expect(hp).toHaveAttribute('tabindex', '-1');
   await expect(hp).not.toBeInViewport();
+});
+
+test('widżet Turnstile renderowany jako interaction-only', async ({ page }) => {
+  await openPage(page, ok);
+  await page.locator('.pill[data-cmd="hire"]').click();
+  await expect.poll(() => page.evaluate(() => window.__ts?.appearance)).toBe('interaction-only');
+});
+
+test('wysyłka przed tokenem czeka na weryfikację, potem wysyła', async ({ page }) => {
+  const requests = await openPage(page, ok, TURNSTILE_SLOW);
+  await page.locator('.pill[data-cmd="hire"]').click();
+  await fill(page);
+  await page.getByRole('button', { name: '[ wyślij ]' }).click();
+  await expect(page.locator('#hire-status')).toHaveText('Trwa weryfikacja antyspamowa…');
+  await expect(page.locator('.hire-submit')).toBeDisabled();
+  await expect(page.locator('#hire-success')).toBeVisible();
+  expect(requests).toHaveLength(1);
+  expect(requests[0].turnstile_token).toBe('tok-slow');
+});
+
+test('błąd weryfikacji: komunikat od razu, bez wysyłki', async ({ page }) => {
+  const requests = await openPage(page, ok, TURNSTILE_ERROR);
+  await page.locator('.pill[data-cmd="hire"]').click();
+  await fill(page);
+  await page.getByRole('button', { name: '[ wyślij ]' }).click();
+  await expect(page.locator('#hire-status')).toHaveText('Trwa weryfikacja antyspamowa…');
+  await page.evaluate(() => window.__ts['error-callback']());
+  await expect(page.locator('[data-error-for="turnstile"]')).toContainText('Weryfikacja antyspamowa nie powiodła się');
+  await expect(page.getByRole('button', { name: '[ wyślij ]' })).toBeEnabled();
+  expect(requests).toHaveLength(0);
 });
