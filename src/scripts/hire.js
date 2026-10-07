@@ -2,8 +2,11 @@
 
 const SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+// Widżet jest niewidoczny (interaction-only), więc wysyłka czeka chwilę na token zamiast od razu zgłaszać błąd.
+const TOKEN_WAIT_MS = 10_000;
 const MSG = {
-  turnstile: 'Potwierdź, że nie jesteś robotem.',
+  turnstile: 'Weryfikacja antyspamowa nie powiodła się. Jeśli widzisz pole Cloudflare, zaznacz je; w przeciwnym razie odśwież stronę albo napisz na biuro@tmask.pl.',
+  verifying: 'Trwa weryfikacja antyspamowa…',
   turnstileLoad: 'Nie udało się załadować zabezpieczenia antyspamowego. Odśwież stronę albo napisz na biuro@tmask.pl.',
   tooMany: 'Za dużo prób. Odczekaj minutę i spróbuj ponownie albo napisz na biuro@tmask.pl.',
   failed: 'Nie udało się wysłać zgłoszenia. Spróbuj później albo napisz na biuro@tmask.pl.',
@@ -18,6 +21,7 @@ const submit = form.querySelector('.hire-submit');
 let opener = null;
 let widgetId = null;
 let turnstileToken = '';
+let tokenWaiter = null;
 let loadPromise = null;
 let busy = false;
 
@@ -45,6 +49,24 @@ function clearErrors() {
   status.textContent = '';
 }
 
+function setToken(token) {
+  turnstileToken = token;
+  if (tokenWaiter) tokenWaiter();
+}
+
+function waitForToken(ms) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => { tokenWaiter = null; resolve(); }, ms);
+    tokenWaiter = () => { clearTimeout(timer); tokenWaiter = null; resolve(); };
+  });
+}
+
+function setBusy(on, label = '[ wyślij ]') {
+  busy = on;
+  submit.disabled = on;
+  submit.textContent = label;
+}
+
 function resetTurnstile() {
   turnstileToken = '';
   if (widgetId !== null && window.turnstile) window.turnstile.reset(widgetId);
@@ -62,9 +84,10 @@ async function openHire() {
         sitekey: SITE_KEY,
         action: 'lead',
         theme: 'dark',
-        callback: (t) => { turnstileToken = t; setFieldError('turnstile', ''); },
+        appearance: 'interaction-only',
+        callback: (t) => { setToken(t); setFieldError('turnstile', ''); },
         'expired-callback': () => { turnstileToken = ''; },
-        'error-callback': () => { turnstileToken = ''; },
+        'error-callback': () => { setToken(''); },
       });
     }
   } catch {
@@ -80,6 +103,13 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (busy) return;
   clearErrors();
+  if (!turnstileToken && widgetId !== null) {
+    setBusy(true, 'weryfikacja…');
+    status.textContent = MSG.verifying;
+    await waitForToken(TOKEN_WAIT_MS);
+    status.textContent = '';
+    setBusy(false);
+  }
   if (!turnstileToken) { setFieldError('turnstile', MSG.turnstile); return; }
 
   const f = form.elements;
@@ -94,16 +124,12 @@ form.addEventListener('submit', async (e) => {
     turnstile_token: turnstileToken,
   };
 
-  busy = true;
-  submit.disabled = true;
-  submit.textContent = 'wysyłanie…';
+  setBusy(true, 'wysyłanie…');
   let res = null;
   try {
     res = await fetch('/api/lead', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
   } catch { /* sieć */ }
-  busy = false;
-  submit.disabled = false;
-  submit.textContent = '[ wyślij ]';
+  setBusy(false);
 
   if (res && res.status === 202) {
     form.hidden = true;
